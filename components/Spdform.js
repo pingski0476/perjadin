@@ -1,0 +1,113 @@
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import pocketbaseEs from "pocketbase";
+import { useEffect, useState } from "react";
+
+export default function Spdform({ nomor, listNama, stId, onClose }) {
+  //declaring variables to connect to database
+  const client = new pocketbaseEs("http://127.0.0.1:8090/");
+
+  //declaring state to reset the form
+  const [safeToReset, setSafeToReset] = useState(false);
+
+  //declaring function to reload the page
+  const refresh = () => {
+    window.location.reload();
+  };
+
+  //declaring react hook form
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { isSubmitSuccessful, isSubmitting },
+  } = useForm();
+
+  const postData = async (data) => {
+    data.surat_tugas = stId;
+    data.nomor = nomor;
+    try {
+      await client.collection("spd").create(data);
+      setSafeToReset(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (safeToReset) {
+      reset();
+      setSafeToReset(false);
+    }
+    if (isSubmitSuccessful) {
+      refresh();
+    }
+  });
+
+  return (
+    <>
+      <Box bgColor={"white"} borderRadius={"md"} p={1}>
+        <VStack w={"100%"} px={2} py={4}>
+          <form onSubmit={handleSubmit(postData)}>
+            <FormControl>
+              <FormLabel>Surat Tugas ID</FormLabel>
+              <Input
+                type={"text"}
+                defaultValue={stId}
+                name={"surat_tugas"}
+                disabled={true}
+                {...register("surat_tugas")}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Nomor SPD</FormLabel>
+              <Input
+                type={"number"}
+                defaultValue={nomor}
+                name={"nomor"}
+                disabled={true}
+                {...register("nomor")}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Nama Pegawai</FormLabel>
+              <Select
+                placeholder="Pilih Nama Pegawai"
+                name="pegawai"
+                {...register("pegawai")}
+              >
+                {listNama.map((nama) => {
+                  if (nama) {
+                    return (
+                      <option key={nama.id} value={nama.id}>
+                        {nama.nama}
+                      </option>
+                    );
+                  }
+                })}
+              </Select>
+            </FormControl>
+            <Button
+              onClick={onClose}
+              w={"100%"}
+              type="submit"
+              colorScheme={"green"}
+              my={3}
+            >
+              Submit
+            </Button>
+          </form>
+        </VStack>
+      </Box>
+    </>
+  );
+}
