@@ -36,10 +36,13 @@ import { useST, useUserStore, client } from "../../store/store";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import PegawaiForm from "../../components/PegawaiForm";
+import pocketbaseEs from "pocketbase";
 
 export default function Dashboard() {
   //declaring router variables
   const router = useRouter();
+
+  const pocket = new pocketbaseEs("http://127.0.0.1:8090/");
 
   //declaring pagination state
   const [countPage, setCountPage] = useState(1);
@@ -80,12 +83,13 @@ export default function Dashboard() {
   //function to fetch surat tugas data
   const getDataST = async () => {
     try {
-      let dataSuratTugas = await client
+      let dataSuratTugas = await pocket
         .collection("surat_tugas")
         .getFullList(1400, {
           sort: "+created",
           expand: "pegawai_1, pegawai_2, pegawai_3, pegawai_4, pegawai_5",
         });
+      console.log(dataSuratTugas);
       setDataST(dataSuratTugas);
     } catch (error) {
       console.log(error);
@@ -110,7 +114,7 @@ export default function Dashboard() {
     try {
       let dataPegawai = await client
         .collection("daftar_pegawai")
-        .getFullList(150, { sort: "-created" });
+        .getFullList(150, { sort: "+created" });
       setListPegawai(dataPegawai);
     } catch (error) {
       console.log(error);
@@ -119,6 +123,7 @@ export default function Dashboard() {
 
   //function to do increment on Nomor Surat Tugas
   const nomorST = dataST.length + 1;
+  console.log(dataST);
 
   //function for handling submit function
   const submitHandler = async (data) => {
@@ -149,6 +154,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     getDataST();
+  }, []);
+
+  useEffect(() => {
     getData();
     getDataPegawai();
   }, [countPage]);
@@ -424,10 +432,26 @@ export default function Dashboard() {
                     let pegawai = data.expand;
                     let stMonth = tanggal_st.getMonth() + 1;
                     let stYear = tanggal_st.getFullYear();
+                    function test() {
+                      if (stMonth < 10) {
+                        let bulan = "0" + stMonth;
+                        return bulan;
+                      } else {
+                        let bulan = stMonth;
+                        return bulan;
+                      }
+                    }
+
+                    const month = test();
 
                     return (
                       <Tr key={data.nomor}>
-                        <Td>{`${data.nomor}/TU.040/A.10/${stMonth}/${stYear}`}</Td>
+                        {data.nomor < 10 ? (
+                          <Td>{`0${data.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        ) : (
+                          <Td>{`${data.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        )}
+
                         <Td>
                           {pegawai.pegawai_1.nama} <br /> <br />
                         </Td>
