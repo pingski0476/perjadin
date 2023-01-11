@@ -89,7 +89,6 @@ export default function Dashboard() {
           sort: "+created",
           expand: "pegawai_1, pegawai_2, pegawai_3, pegawai_4, pegawai_5",
         });
-      console.log(dataSuratTugas);
       setDataST(dataSuratTugas);
     } catch (error) {
       console.log(error);
@@ -123,7 +122,6 @@ export default function Dashboard() {
 
   //function to do increment on Nomor Surat Tugas
   const nomorST = dataST.length + 1;
-  console.log(dataST);
 
   //function for handling submit function
   const submitHandler = async (data) => {
@@ -336,7 +334,7 @@ export default function Dashboard() {
                         </Select>
                       </FormControl>
                       <HStack>
-                        <FormControl>
+                        <FormControl isRequired>
                           <FormLabel>Kota Asal</FormLabel>
                           <Input
                             type={"text"}
@@ -344,7 +342,7 @@ export default function Dashboard() {
                             {...register("kota_asal")}
                           />
                         </FormControl>
-                        <FormControl>
+                        <FormControl isRequired>
                           <FormLabel>Kota Tujuan</FormLabel>
                           <Input
                             type={"text"}
@@ -354,7 +352,7 @@ export default function Dashboard() {
                         </FormControl>
                       </HStack>
                       <HStack>
-                        <FormControl>
+                        <FormControl isRequired>
                           <FormLabel>Tanggal Berangkat</FormLabel>
                           <SingleDatepicker
                             name={"tanggal_berangkat"}
@@ -364,7 +362,7 @@ export default function Dashboard() {
                             {...register("tanggal_berangkat")}
                           />
                         </FormControl>
-                        <FormControl>
+                        <FormControl isRequired>
                           <FormLabel>Tanggal Kembali</FormLabel>
                           <SingleDatepicker
                             name={"tanggal_kembali"}
@@ -375,7 +373,7 @@ export default function Dashboard() {
                         </FormControl>
                       </HStack>
 
-                      <FormControl>
+                      <FormControl isRequired>
                         <FormLabel>Dalam Rangka</FormLabel>
                         <Textarea
                           placeholder="Masukkan tujuan perjalanan"
@@ -441,7 +439,6 @@ export default function Dashboard() {
                         return bulan;
                       }
                     }
-
                     const month = test();
 
                     return (
@@ -456,8 +453,8 @@ export default function Dashboard() {
                           {pegawai.pegawai_1.nama} <br /> <br />
                         </Td>
                         <Td>{data.kota_tujuan}</Td>
-                        <Td>{tanggal_berangkat.toLocaleDateString()}</Td>
-                        <Td>{tanggal_st.toLocaleDateString()}</Td>
+                        <Td>{tanggal_berangkat.toLocaleDateString("en-GB")}</Td>
+                        <Td>{tanggal_st.toLocaleDateString("en-GB")}</Td>
                         <Td>
                           <Link href={`/dashboard/${data.id}`} key={data.id}>
                             <Button colorScheme={"blue"}>Details</Button>
