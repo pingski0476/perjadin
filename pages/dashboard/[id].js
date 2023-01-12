@@ -178,10 +178,33 @@ export default function Details() {
                     let tanggal = new Date(suratTugas.created);
                     let stMonth = tanggal.getMonth() + 1;
                     let stYear = tanggal.getFullYear();
+
+                    function test() {
+                      if (stMonth < 10) {
+                        let bulan = "0" + stMonth;
+                        return bulan;
+                      } else {
+                        let bulan = stMonth;
+                        return bulan;
+                      }
+                    }
+
+                    const month = test();
+
                     return (
                       <Tr key={spd.id}>
-                        <Td>{`${suratTugas.nomor}/TU.040/A.10/${stMonth}/${stYear}`}</Td>
-                        <Td>{`${spd.nomor}/TU.040/A.10/${stMonth}/${stYear}`}</Td>
+                        {suratTugas.nomor < 10 ? (
+                          <Td>{`0${suratTugas.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        ) : (
+                          <Td>{`${suratTugas.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        )}
+
+                        {spd.nomor < 10 ? (
+                          <Td>{`0${spd.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        ) : (
+                          <Td>{`${spd.nomor}/TU.040/A.10/${month}/${stYear}`}</Td>
+                        )}
+
                         <Td>{pegawai.nama}</Td>
                       </Tr>
                     );
