@@ -11,10 +11,11 @@ import {
 import { useForm } from "react-hook-form";
 import pocketbaseEs from "pocketbase";
 import { useEffect, useState } from "react";
+import { address } from "../store/store";
 
 export default function Spdform({ nomor, listNama, stId, onClose }) {
   //declaring variables to connect to database
-  const client = new pocketbaseEs("http://127.0.0.1:8090/");
+  const client = new pocketbaseEs(address);
 
   //declaring state to reset the form
   const [safeToReset, setSafeToReset] = useState(false);

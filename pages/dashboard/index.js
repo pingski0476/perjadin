@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import Link from "next/link";
-import { useST, useUserStore, client } from "../../store/store";
+import { useST, useUserStore, client, address } from "../../store/store";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 import PegawaiForm from "../../components/PegawaiForm";
@@ -42,7 +42,7 @@ export default function Dashboard() {
   //declaring router variables
   const router = useRouter();
 
-  const pocket = new pocketbaseEs("http://127.0.0.1:8090/");
+  const pocket = new pocketbaseEs(address);
 
   //declaring pagination state
   const [countPage, setCountPage] = useState(1);

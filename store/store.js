@@ -2,7 +2,9 @@ import create from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import pocketbaseEs from "pocketbase";
 
-export const client = new pocketbaseEs("http://127.0.0.1:8090/");
+export const address = "http://127.0.0.1:8090/";
+
+export const client = new pocketbaseEs(address);
 
 const useStore = create(
   devtools(
