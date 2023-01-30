@@ -70,7 +70,7 @@ export default function Details() {
     try {
       let dataSpd = await client
         .collection("spd")
-        .getFullList(6, { sort: "+created", expand: "surat_tugas, pegawai" });
+        .getFullList({ sort: "+created", expand: "surat_tugas, pegawai" });
       setSpdData(dataSpd);
     } catch (error) {
       console.log(error);

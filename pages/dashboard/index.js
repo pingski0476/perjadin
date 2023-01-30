@@ -25,6 +25,7 @@ import {
   Td,
   Th,
   Tbody,
+  useToast,
 } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import Head from "next/head";
@@ -63,6 +64,12 @@ export default function Dashboard() {
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
 
+  //declaring toast for error
+  const errorToast = useToast();
+
+  //declaring toast if the post is successful
+  const successToast = useToast();
+
   //declaring rect-hook-form
   const {
     handleSubmit,
@@ -98,7 +105,7 @@ export default function Dashboard() {
   const getData = async () => {
     try {
       let data = await client.collection("surat_tugas").getList(1, 10, {
-        sort: "+created",
+        sort: "-created",
         expand: "pegawai_1, pegawai_2, pegawai_3, pegawai_4, pegawai_5",
         page: countPage,
       });
@@ -132,7 +139,14 @@ export default function Dashboard() {
       await client.collection("surat_tugas").create(data);
       setSafeToReset(true);
     } catch (error) {
-      console.log(error);
+      errorToast({
+        position: "top",
+        title: "Submit Gagal",
+        description: "Input data gagal",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -144,8 +158,17 @@ export default function Dashboard() {
     if (safeToReset) {
       reset();
       setSafeToReset(false);
+      modalSPT.onClose();
     }
     if (isSubmitSuccessful) {
+      successToast({
+        position: "top",
+        title: "Submit Sukses",
+        description: "Sukses membuat surat tugas baru",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       refresh();
     }
   }, [safeToReset]);
@@ -384,7 +407,6 @@ export default function Dashboard() {
 
                       <Button
                         mx={"auto"}
-                        onClick={modalSPT.onClose}
                         type="submit"
                         mt={4}
                         colorScheme="green"

@@ -7,6 +7,7 @@ import {
   Select,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import pocketbaseEs from "pocketbase";
@@ -19,6 +20,12 @@ export default function Spdform({ nomor, listNama, stId, onClose }) {
 
   //declaring state to reset the form
   const [safeToReset, setSafeToReset] = useState(false);
+
+  //declaring toast for submit success
+  const successToast = useToast();
+
+  //declaring toast for error on submit
+  const errorToast = useToast();
 
   //declaring function to reload the page
   const refresh = () => {
@@ -40,7 +47,14 @@ export default function Spdform({ nomor, listNama, stId, onClose }) {
       await client.collection("spd").create(data);
       setSafeToReset(true);
     } catch (error) {
-      console.log(error);
+      errorToast({
+        position: "top",
+        title: "Submit Gagal",
+        description: "Input data gagal",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -50,6 +64,14 @@ export default function Spdform({ nomor, listNama, stId, onClose }) {
       setSafeToReset(false);
     }
     if (isSubmitSuccessful) {
+      successToast({
+        position: "top",
+        title: "Input Sukses",
+        description: "Data SPD berhasil diinput",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       refresh();
     }
   });
