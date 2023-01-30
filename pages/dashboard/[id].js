@@ -23,11 +23,14 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState, useMemo } from "react";
 import Spdform from "../../components/Spdform";
-import { useUserStore, client } from "../../store/store";
+import { useUserStore, address } from "../../store/store";
+import pocketbaseEs from "pocketbase";
 
 export default function Details() {
   //declaring modal state open or close
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const pocket = new pocketbaseEs(address);
 
   const { currentUser } = useUserStore((state) => state);
 
@@ -56,7 +59,7 @@ export default function Details() {
   //declaring function to fetch single item from surat tugas database
   const getSingleST = async () => {
     try {
-      let singleData = await client.collection("surat_tugas").getOne(`${id}`, {
+      let singleData = await pocket.collection("surat_tugas").getOne(`${id}`, {
         expand: "pegawai_1, pegawai_2, pegawai_3, pegawai_4, pegawai_5",
       });
       setSingle(singleData);
@@ -68,9 +71,9 @@ export default function Details() {
   //declaring function to fetch list from spd database
   const getSPD = async () => {
     try {
-      let dataSpd = await client
+      let dataSpd = await pocket
         .collection("spd")
-        .getFullList({ sort: "+created", expand: "surat_tugas, pegawai" });
+        .getFullList(6, { sort: "+created", expand: "surat_tugas, pegawai" });
       setSpdData(dataSpd);
     } catch (error) {
       console.log(error);
@@ -123,6 +126,7 @@ export default function Details() {
     [id, spdData]
   );
 
+  console.log(filteredSPD);
   const nomorSPD = spdData.length + 1;
 
   return (
