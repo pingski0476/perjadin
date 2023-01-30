@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import create from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import pocketbaseEs from "pocketbase";
 
