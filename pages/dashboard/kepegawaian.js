@@ -56,6 +56,8 @@ export default function Kepegawaian() {
     }
   }
 
+  console.log(listSpd);
+
   //declaring function to render the data
   useEffect(
     function () {
@@ -174,12 +176,34 @@ export default function Kepegawaian() {
                 </Tbody>
               </Table>
               <HStack mt={3}>
-                <Button colorScheme={"blue"}>
-                  <ArrowLeftIcon />
-                </Button>
-                <Button colorScheme={"blue"}>
-                  <ArrowRightIcon />
-                </Button>
+                {listSpd.page === 1 ? (
+                  <Button
+                    colorScheme={"blue"}
+                    disabled={true}
+                    onClick={decPage}
+                  >
+                    {" "}
+                    <ArrowLeftIcon />{" "}
+                  </Button>
+                ) : (
+                  <Button colorScheme={"blue"} onClick={decPage}>
+                    {" "}
+                    <ArrowLeftIcon />{" "}
+                  </Button>
+                )}
+                {listSpd.page === listSpd.totalPages ? (
+                  <Button
+                    colorScheme={"blue"}
+                    disabled={true}
+                    onClick={incPage}
+                  >
+                    <ArrowRightIcon />
+                  </Button>
+                ) : (
+                  <Button colorScheme={"blue"} onClick={incPage}>
+                    <ArrowRightIcon />
+                  </Button>
+                )}
               </HStack>
             </TableContainer>
           </VStack>
