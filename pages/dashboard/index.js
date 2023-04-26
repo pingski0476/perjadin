@@ -97,6 +97,7 @@ export default function Dashboard() {
           expand: "pegawai_1, pegawai_2, pegawai_3, pegawai_4, pegawai_5",
         });
       setDataST(dataSuratTugas);
+      console.log(dataST);
     } catch (error) {
       console.log(error);
     }
@@ -128,7 +129,7 @@ export default function Dashboard() {
   };
 
   //function to do increment on Nomor Surat Tugas
-  const nomorST = dataST.length + 1;
+  const nomorST = dataST.length + 24 + 1;
 
   //function for handling submit function
   const submitHandler = async (data) => {

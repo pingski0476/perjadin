@@ -127,7 +127,7 @@ export default function Details() {
   );
 
   console.log(filteredSPD);
-  const nomorSPD = spdData.length + 1;
+  const nomorSPD = spdData.length + 56 + 1;
 
   return (
     <>
